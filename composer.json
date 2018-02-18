@@ -1,0 +1,29 @@
+{
+    "name": "qlimix/middleware-router",
+    "type": "library",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Frank",
+            "email": "frank@qlimix.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Qlimix\\MiddlewareRouter\\": "src/"
+        }
+    },
+    "require": {
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0"
+    },
+    "require-dev": {
+        "aura/router": "^3.1"
+    },
+    "suggest": {
+        "aura/router": "Aura router implementation"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
