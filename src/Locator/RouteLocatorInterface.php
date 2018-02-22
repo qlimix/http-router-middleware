@@ -2,6 +2,7 @@
 
 namespace Qlimix\MiddlewareRouter\Locator;
 
+use Qlimix\HttpRequestHandler\Middleware\MiddlewareStack;
 use Qlimix\MiddlewareRouter\Locator\Exception\LocatorException;
 
 interface RouteLocatorInterface
@@ -9,9 +10,9 @@ interface RouteLocatorInterface
     /**
      * @param string $route
      *
-     * @return MiddlewareCollection
+     * @return MiddlewareStack
      *
      * @throws LocatorException
      */
-    public function locate(string $route): MiddlewareCollection;
+    public function locate(string $route): MiddlewareStack;
 }

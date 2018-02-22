@@ -4,6 +4,7 @@ namespace Qlimix\MiddlewareRouter\Aura;
 
 use Aura\Router\RouterContainer;
 use Psr\Http\Message\ServerRequestInterface;
+use Qlimix\HttpRequestHandler\Middleware\MiddlewareStack;
 use Qlimix\MiddlewareRouter\Exception\RouteNotFoundException;
 use Qlimix\MiddlewareRouter\Exception\RouterException;
 use Qlimix\MiddlewareRouter\Locator\RouteLocatorInterface;
@@ -28,7 +29,7 @@ final class AuraMiddlewareRouter implements MiddlewareRouterInterface
     /**
      * @inheritDoc
      */
-    public function route(ServerRequestInterface $request): MiddlewareCollection
+    public function route(ServerRequestInterface $request): MiddlewareStack
     {
         $route = $this->routeContainer->getMatcher()->match($request);
 
