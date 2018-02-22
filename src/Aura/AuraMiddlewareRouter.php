@@ -3,20 +3,20 @@
 namespace Qlimix\MiddlewareRouter\Aura;
 
 use Aura\Router\RouterContainer;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Qlimix\HttpRequestHandler\Middleware\MiddlewareStack;
+use Qlimix\HttpRequestHandler\MiddlewareRequestHandler;
 use Qlimix\MiddlewareRouter\Exception\RouteNotFoundException;
 use Qlimix\MiddlewareRouter\Exception\RouterException;
-use Qlimix\MiddlewareRouter\Locator\RouteLocatorInterface;
-use Qlimix\MiddlewareRouter\MiddlewareRouterInterface;
+use Qlimix\MiddlewareRouter\Middleware\ParentRequestHandlerMiddleware;
 
-final class AuraMiddlewareRouter implements MiddlewareRouterInterface
+final class AuraMiddlewareRouter implements MiddlewareInterface
 {
     /** @var RouterContainer */
     private $routeContainer;
-
-    /** @var RouteLocatorInterface */
-    private $routeLocator;
 
     /**
      * @param RouterContainer $routeContainer
@@ -28,8 +28,11 @@ final class AuraMiddlewareRouter implements MiddlewareRouterInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws RouterException
+     * @throws RouteNotFoundException
      */
-    public function route(ServerRequestInterface $request): MiddlewareStack
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $route = $this->routeContainer->getMatcher()->match($request);
 
@@ -37,14 +40,17 @@ final class AuraMiddlewareRouter implements MiddlewareRouterInterface
             throw new RouteNotFoundException('Route not found');
         }
 
+        $middleware = $route->handler;
+        if (!$middleware instanceof MiddlewareStack) {
+            throw new RouterException('Invalid handler path');
+        }
+
         foreach ($route->attributes as $key => $val) {
             $request = $request->withAttribute($key, $val);
         }
 
-        try {
-            return $this->routeLocator->locate($route->handler);
-        } catch (\Exception $exception) {
-            throw new RouterException('Could not locate middleware stack', 0, $exception);
-        }
+        $middleware->push(new ParentRequestHandlerMiddleware($handler));
+
+        return (new MiddlewareRequestHandler($middleware))->handle($request);
     }
 }
