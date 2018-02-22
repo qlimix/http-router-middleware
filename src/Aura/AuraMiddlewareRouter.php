@@ -11,6 +11,8 @@ use Qlimix\HttpRequestHandler\Middleware\MiddlewareStack;
 use Qlimix\HttpRequestHandler\MiddlewareRequestHandler;
 use Qlimix\MiddlewareRouter\Exception\RouteNotFoundException;
 use Qlimix\MiddlewareRouter\Exception\RouterException;
+use Qlimix\MiddlewareRouter\Locator\Exception\LocatorException;
+use Qlimix\MiddlewareRouter\Locator\RouteLocatorInterface;
 use Qlimix\MiddlewareRouter\Middleware\ParentRequestHandlerMiddleware;
 
 final class AuraMiddlewareRouter implements MiddlewareInterface
@@ -18,19 +20,25 @@ final class AuraMiddlewareRouter implements MiddlewareInterface
     /** @var RouterContainer */
     private $routeContainer;
 
+    /** @var RouteLocatorInterface */
+    private $locator;
+
     /**
      * @param RouterContainer $routeContainer
+     * @param RouteLocatorInterface $locator
      */
-    public function __construct(RouterContainer $routeContainer)
+    public function __construct(RouterContainer $routeContainer, RouteLocatorInterface $locator)
     {
         $this->routeContainer = $routeContainer;
+        $this->locator = $locator;
     }
 
     /**
      * @inheritDoc
      *
-     * @throws RouterException
      * @throws RouteNotFoundException
+     * @throws RouterException
+     * @throws LocatorException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -40,10 +48,7 @@ final class AuraMiddlewareRouter implements MiddlewareInterface
             throw new RouteNotFoundException('Route not found');
         }
 
-        $middleware = $route->handler;
-        if (!$middleware instanceof MiddlewareStack) {
-            throw new RouterException('Invalid handler path');
-        }
+        $middleware = $this->locator->locate($route->handler);
 
         foreach ($route->attributes as $key => $val) {
             $request = $request->withAttribute($key, $val);
