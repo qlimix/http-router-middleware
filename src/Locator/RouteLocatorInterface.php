@@ -2,7 +2,7 @@
 
 namespace Qlimix\MiddlewareRouter\Locator;
 
-use Qlimix\HttpRequestHandler\Middleware\MiddlewareStack;
+use Qlimix\RequestHandler\Middleware\MiddlewareStack;
 use Qlimix\MiddlewareRouter\Locator\Exception\LocatorException;
 
 interface RouteLocatorInterface
