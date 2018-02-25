@@ -25,6 +25,6 @@ final class ParentRequestHandlerMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->parentHandler->handle($request);
+        return $this->parentHandler->handle($request);
     }
 }
