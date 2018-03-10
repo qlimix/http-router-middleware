@@ -1,7 +1,7 @@
 {
     "name": "qlimix/middleware-router",
     "type": "library",
-    "license": "mit",
+    "license": "LGPL-3.0-only",
     "authors": [
         {
             "name": "Frank",
@@ -31,7 +31,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "git@bitbucket.org:qlimix/request-handler.git"
+            "url":  "git@bitbucket.org:qlimix/http-request-handler.git"
         }
     ]
 }

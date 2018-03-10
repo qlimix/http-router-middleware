@@ -3,7 +3,7 @@
 namespace Qlimix\MiddlewareRouter\Locator;
 
 use Psr\Container\ContainerInterface;
-use Qlimix\RequestHandler\Middleware\MiddlewareStack;
+use Qlimix\HttpRequestHandler\Middleware\MiddlewareStack;
 use Qlimix\MiddlewareRouter\Locator\Exception\LocatorException;
 
 final class PSRContainerLocator implements RouteLocatorInterface
