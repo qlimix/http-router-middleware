@@ -7,9 +7,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Qlimix\HttpRequestHandler\Exception\HttpRequestHandlerException;
 use Qlimix\HttpRequestHandler\MiddlewareHttpRequestHandler;
 use Qlimix\MiddlewareRouter\Exception\RouteNotFoundException;
-use Qlimix\MiddlewareRouter\Exception\RouterException;
 use Qlimix\MiddlewareRouter\Locator\Exception\LocatorException;
 use Qlimix\MiddlewareRouter\Locator\RouteLocatorInterface;
 use Qlimix\MiddlewareRouter\Middleware\ParentRequestHandlerMiddleware;
@@ -36,8 +36,8 @@ final class AuraMiddlewareRouter implements MiddlewareInterface
      * @inheritDoc
      *
      * @throws RouteNotFoundException
-     * @throws RouterException
      * @throws LocatorException
+     * @throws HttpRequestHandlerException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
