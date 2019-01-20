@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Qlimix\\HttpMiddleware\\Router": "src/"
+            "Qlimix\\HttpMiddleware\\Router\\": "src/"
         }
     },
     "require": {
