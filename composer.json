@@ -16,8 +16,7 @@
     "require": {
         "psr/container": "^1.0",
         "psr/http-server-handler": "^1.0",
-        "psr/http-server-middleware": "^1.0",
-        "qlimix/http-request-handler": "dev-master"
+        "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
         "aura/router": "^3.1"
