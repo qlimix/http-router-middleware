@@ -27,11 +27,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@bitbucket.org:qlimix/http-request-handler.git"
-        }
-    ]
+    }
 }
