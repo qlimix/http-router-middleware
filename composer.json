@@ -1,5 +1,5 @@
 {
-    "name": "qlimix/middleware-router",
+    "name": "qlimix/http-middleware-router",
     "type": "library",
     "license": "LGPL-3.0-only",
     "authors": [
@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Qlimix\\MiddlewareRouter\\": "src/"
+            "Qlimix\\HttpMiddleware\\Router": "src/"
         }
     },
     "require": {

@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Qlimix\MiddlewareRouter\Exception;
+namespace Qlimix\HttpMiddleware\Router\Exception;
 
-final class RouterException extends \Exception
+use Exception;
+
+final class RouterException extends Exception
 {
 }
