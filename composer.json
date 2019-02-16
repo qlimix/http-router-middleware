@@ -15,6 +15,7 @@
     },
     "require": {
         "psr/http-server-middleware": "^1.0",
+        "qlimix/http": "dev-master",
         "qlimix/router": "dev-master"
     },
     "require-dev": {
@@ -24,6 +25,10 @@
         "sort-packages": true
     },
     "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@bitbucket.org:qlimix/http.git"
+        },
         {
             "type": "vcs",
             "url":  "git@bitbucket.org:qlimix/router.git"

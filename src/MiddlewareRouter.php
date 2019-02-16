@@ -6,9 +6,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Qlimix\Http\Exception\InternalServerErrorException;
+use Qlimix\Http\Exception\NotFoundException;
+use Qlimix\HttpMiddleware\Exception\InvalidRouteHandlerException;
 use Qlimix\Router\Exception\RouteNotFoundException;
-use Qlimix\Router\Exception\RouterException;
 use Qlimix\Router\RouterInterface;
+use Throwable;
 
 final class MiddlewareRouter implements MiddlewareInterface
 {
@@ -21,11 +24,26 @@ final class MiddlewareRouter implements MiddlewareInterface
     }
 
     /**
-     * @throws RouteNotFoundException
-     * @throws RouterException
+     * @inheritdoc
+     *
+     * @throws NotFoundException
+     * @throws InternalServerErrorException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        return $this->router->route($request)->handle();
+        try {
+            $routeRequestHandler = $this->router->route($request);
+
+            $handler = $routeRequestHandler->getHandler();
+            if (!$handler instanceof RequestHandlerInterface) {
+                throw new InvalidRouteHandlerException('Invalid handler expecting '.RequestHandlerInterface::class);
+            }
+
+            return $handler->handle($routeRequestHandler->getRequest());
+        } catch (RouteNotFoundException $exception) {
+            throw new NotFoundException();
+        } catch (Throwable $exception) {
+            throw new InternalServerErrorException($exception);
+        }
     }
 }
