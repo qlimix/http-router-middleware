@@ -1,5 +1,5 @@
 {
-    "name": "qlimix/http-middleware-router",
+    "name": "qlimix/http-router-middleware",
     "type": "library",
     "license": "LGPL-3.0-only",
     "authors": [
