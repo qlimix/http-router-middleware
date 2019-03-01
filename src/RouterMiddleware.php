@@ -13,7 +13,7 @@ use Qlimix\Router\Exception\RouteNotFoundException;
 use Qlimix\Router\RouterInterface;
 use Throwable;
 
-final class MiddlewareRouter implements MiddlewareInterface
+final class RouterMiddleware implements MiddlewareInterface
 {
     /** @var RouterInterface */
     private $router;
@@ -34,12 +34,12 @@ final class MiddlewareRouter implements MiddlewareInterface
         try {
             $routeRequestHandler = $this->router->route($request);
 
-            $handler = $routeRequestHandler->getHandler();
-            if (!$handler instanceof RequestHandlerInterface) {
+            $requestHandler = $routeRequestHandler->getHandler();
+            if (!$requestHandler instanceof RequestHandlerInterface) {
                 throw new InvalidRouteHandlerException('Invalid handler expecting '.RequestHandlerInterface::class);
             }
 
-            return $handler->handle($routeRequestHandler->getRequest());
+            return $requestHandler->handle($routeRequestHandler->getRequest());
         } catch (RouteNotFoundException $exception) {
             throw new NotFoundException();
         } catch (Throwable $exception) {
