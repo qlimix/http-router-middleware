@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Qlimix\HttpMiddleware;
+namespace Qlimix\Http\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -8,19 +8,21 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Qlimix\Http\Exception\InternalServerErrorException;
 use Qlimix\Http\Exception\NotFoundException;
-use Qlimix\HttpMiddleware\Exception\InvalidRouteHandlerException;
-use Qlimix\Router\Exception\RouteNotFoundException;
-use Qlimix\Router\RouterInterface;
+use Qlimix\Http\Router\Exception\RouteNotFoundException;
+use Qlimix\Http\Router\HttpRouterInterface;
+use Qlimix\Http\Router\Locator\LocatorInterface;
 use Throwable;
 
 final class RouterMiddleware implements MiddlewareInterface
 {
-    /** @var RouterInterface */
-    private $router;
+    private HttpRouterInterface $router;
 
-    public function __construct(RouterInterface $router)
+    private LocatorInterface $locator;
+
+    public function __construct(HttpRouterInterface $router, LocatorInterface $locator)
     {
         $this->router = $router;
+        $this->locator = $locator;
     }
 
     /**
@@ -32,14 +34,13 @@ final class RouterMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         try {
-            $routeRequestHandler = $this->router->route($request);
+            $route = $this->router->route($request);
 
-            $requestHandler = $routeRequestHandler->getHandler();
-            if (!$requestHandler instanceof RequestHandlerInterface) {
-                throw new InvalidRouteHandlerException('Invalid handler expecting '.RequestHandlerInterface::class);
+            foreach ($route->getParameters() as $parameter) {
+                $request = $request->withAttribute($parameter->getKey(), $parameter->getValue());
             }
 
-            return $requestHandler->handle($routeRequestHandler->getRequest());
+            return $this->locator->locate($route->getHandler())->handle($request);
         } catch (RouteNotFoundException $exception) {
             throw new NotFoundException();
         } catch (Throwable $exception) {

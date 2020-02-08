@@ -1,39 +1,33 @@
 {
     "name": "qlimix/http-router-middleware",
     "type": "library",
-    "license": "LGPL-3.0-only",
+    "license": "MIT",
     "authors": [
         {
             "name": "Frank",
             "email": "frank@qlimix.net"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Qlimix\\HttpMiddleware\\": "src/"
-        }
-    },
     "require": {
+        "php": "^7.4",
         "psr/http-server-middleware": "^1.0",
-        "qlimix/http": "dev-master",
-        "qlimix/router": "dev-master"
+        "qlimix/http": "1.0.0",
+        "qlimix/http-router": "2.0.0"
     },
     "require-dev": {
-        "aura/router": "^3.1"
+        "qlimix/code-standard": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qlimix\\Http\\Middleware\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Qlimix\\Test\\Http\\Middleware\\": "tests/"
+        }
     },
     "config": {
         "sort-packages": true
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@bitbucket.org:qlimix/http.git"
-        },
-        {
-            "type": "vcs",
-            "url":  "git@bitbucket.org:qlimix/router.git"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

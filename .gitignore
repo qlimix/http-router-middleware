@@ -1,3 +1,11 @@
 .idea
 vendor
 composer.lock
+.phpunit.result.cache
+clover.xml
+coveralls.json
+.env
+!.gitkeep
+infection.log
+summary.log
+per-mutator.md
